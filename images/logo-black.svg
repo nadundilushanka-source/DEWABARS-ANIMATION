@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 60">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00e676;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#39FF14;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Icon -->
+  <circle cx="30" cy="30" r="20" fill="url(#grad1)" />
+  <path d="M38 30 L26 22 L26 38 Z" fill="#111111" />
+  
+  <!-- Text -->
+  <text x="65" y="42" font-family="Arial, sans-serif" font-weight="bold" font-size="32" fill="#111111" letter-spacing="-1">DEWABARS</text>
+</svg>

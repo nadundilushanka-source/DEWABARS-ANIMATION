@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - DEWABARS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#00e676',
+                        secondary: '#111111',
+                        accent: '#39FF14',
+                        dark: '#080808',
+                        light: '#ffffff',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Performance Optimization: Preconnects -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 dark:bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-2xl w-full max-w-md">
+            <h2 class="text-3xl font-bold text-center mb-6">Admin Login</h2>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Username</label>
+                    <input type="text" id="username"
+                        class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 focus:ring-2 focus:ring-primary outline-none"
+                        placeholder="admin">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Password</label>
+                    <input type="password" id="password"
+                        class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 focus:ring-2 focus:ring-primary outline-none"
+                        placeholder="admin123">
+                </div>
+                <button type="submit"
+                    class="w-full bg-primary hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors">
+                    Login
+                </button>
+                <p id="loginError" class="text-red-500 text-sm text-center hidden">Invalid credentials</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard (Hidden by default) -->
+    <div id="dashboard" class="hidden min-h-screen flex">
+
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white dark:bg-slate-900 shadow-xl flex flex-col fixed h-full z-10">
+            <div class="p-6 border-b dark:border-slate-800">
+                <h1 class="text-2xl font-black tracking-tighter text-primary">DEWABARS <span
+                        class="text-slate-500 text-sm block font-normal">Admin Panel</span></h1>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <button onclick="switchTab('services')"
+                    class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors text-primary bg-slate-100 dark:bg-slate-800">
+                    <i class="fas fa-cubes"></i> Services
+                </button>
+                <button onclick="switchTab('portfolio')"
+                    class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors">
+                    <i class="fas fa-images"></i> Portfolio
+                </button>
+                <button onclick="switchTab('comments')"
+                    class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors">
+                    <i class="fas fa-comments"></i> Comments
+                </button>
+                <button onclick="switchTab('pricing')"
+                    class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors">
+                    <i class="fas fa-tags"></i> Pricing
+                </button>
+                <button onclick="switchTab('process')"
+                    class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors">
+                    <i class="fas fa-list-ol"></i> How It Works
+                </button>
+                <button onclick="switchTab('content')"
+                    class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors">
+                    <i class="fas fa-edit"></i> Page Content
+                </button>
+                <!-- Add Toggle Link -->
+                <!-- Sync Status Widget -->
+                <div class="mt-auto pt-6">
+                    <div
+                        class="bg-gradient-to-br from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden group">
+                        <!-- Decorative glow -->
+                        <div
+                            class="absolute top-0 right-0 w-16 h-16 bg-green-500/10 rounded-full blur-xl -mr-8 -mt-8 transition-opacity opacity-50 group-hover:opacity-100">
+                        </div>
+
+                        <div class="flex items-center justify-between mb-3 relative z-10">
+                            <div class="flex items-center gap-2">
+                                <span class="relative flex h-2.5 w-2.5">
+                                    <span
+                                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"
+                                        id="status-dot"></span>
+                                </span>
+                                <span
+                                    class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Live</span>
+                            </div>
+                            <button onclick="forceSync()"
+                                class="text-slate-400 hover:text-primary transition-colors p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                                title="Force Sync">
+                                <i class="fas fa-sync-alt text-xs" id="force-sync-icon"></i>
+                            </button>
+                        </div>
+
+                        <div class="space-y-1 relative z-10">
+                            <p class="text-[10px] text-slate-400 uppercase font-semibold">Last Synced</p>
+                            <p class="text-xs font-medium text-slate-700 dark:text-slate-200 font-mono"
+                                id="last-sync-time">Just now</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <button onclick="toggleTheme()"
+                        class="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors">
+                        <i class="fas fa-adjust"></i> Theme Toggle
+                    </button>
+                    <button onclick="clearSystemStorage()"
+                        class="w-full text-left px-4 py-3 rounded-lg text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 flex items-center gap-3 transition-colors mt-2">
+                        <i class="fas fa-database"></i> Clear Storage
+                    </button>
+                    <button onclick="logout()"
+                        class="w-full text-left px-4 py-3 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-3 transition-colors mt-2">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 ml-64 p-8 overflow-y-auto">
+
+            <!-- Services Management -->
+            <section id="services-tab" class="tab-content">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold">Manage Services</h2>
+                    <button onclick="openModal('serviceModal')"
+                        class="bg-primary hover:bg-green-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Add Service
+                    </button>
+                </div>
+                <div id="servicesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Services will be injected here JS -->
+                </div>
+            </section>
+
+            <!-- Portfolio Management -->
+            <section id="portfolio-tab" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold">Manage Portfolio</h2>
+                    <div class="flex gap-2">
+                        <button onclick="openCategoryManager()"
+                            class="bg-gray-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition-colors">
+                            <i class="fas fa-tags"></i> Manage Categories
+                        </button>
+                        <button onclick="openModal('portfolioModal')"
+                            class="bg-primary hover:bg-green-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2">
+                            <i class="fas fa-plus"></i> Add Item
+                        </button>
+                    </div>
+                </div>
+                <div id="portfolioList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Portfolio items will be injected here JS -->
+                </div>
+            </section>
+
+            <!-- Comments Management -->
+            <section id="comments-tab" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold">Manage Comments</h2>
+                </div>
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-slate-50 dark:bg-slate-900/50">
+                                <tr>
+                                    <th class="px-6 py-4 text-left font-bold text-slate-500">User</th>
+                                    <th class="px-6 py-4 text-left font-bold text-slate-500">Comment</th>
+                                    <th class="px-6 py-4 text-left font-bold text-slate-500">Rating</th>
+                                    <th class="px-6 py-4 text-left font-bold text-slate-500">Status</th>
+                                    <th class="px-6 py-4 text-left font-bold text-slate-500">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="commentsList" class="divide-y divide-slate-100 dark:divide-slate-700">
+                                <!-- Comments will be injected here JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pricing Management -->
+            <section id="pricing-tab" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold">Manage Pricing</h2>
+                    <button onclick="openModal('pricingModal')"
+                        class="bg-primary hover:bg-green-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Add Plan
+                    </button>
+                </div>
+                <div id="pricingList" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- Process Management -->
+            <section id="process-tab" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold">Manage Process (How It Works)</h2>
+                    <button onclick="openModal('processModal')"
+                        class="bg-primary hover:bg-green-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Add Step
+                    </button>
+                </div>
+                <div id="processList" class="space-y-4"></div>
+            </section>
+
+            <!-- Site Content Management -->
+            <section id="content-tab" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold">Manage Page Content</h2>
+                </div>
+                <form onsubmit="handleContentSubmit(event)" class="space-y-8 max-w-4xl">
+                    <!-- Home Section -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg">
+                        <h3
+                            class="text-xl font-bold mb-4 text-primary border-b border-gray-200 dark:border-gray-700 pb-2">
+                            Home Page</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Hero Title</label>
+                                <input type="text" name="homeHeroTitle" id="homeHeroTitle"
+                                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Hero Subtitle</label>
+                                <textarea name="homeHeroSubtitle" id="homeHeroSubtitle"
+                                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 h-24"></textarea>
+                            </div>
+
+                            <!-- Hero Image Selection -->
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Hero Image</label>
+                                <div class="flex gap-4 mb-2">
+                                    <button type="button" onclick="toggleHomeHeroMediaType('file')" id="btn-hero-file"
+                                        class="text-sm font-bold text-slate-500 border-b-2 border-transparent pb-1">Upload
+                                        Image</button>
+                                    <button type="button" onclick="toggleHomeHeroMediaType('url')" id="btn-hero-url"
+                                        class="text-sm font-bold text-primary border-b-2 border-primary pb-1">Image
+                                        URL</button>
+                                </div>
+                                <div id="homeHeroImageFileGroup" class="hidden">
+                                    <input type="file" name="homeHeroImageFile" accept="image/*"
+                                        class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                                    <p class="text-xs text-slate-500 mt-1">Max size: 2MB.</p>
+                                </div>
+                                <div id="homeHeroImageUrlGroup">
+                                    <input type="url" name="homeHeroImage" id="homeHeroImage" placeholder="https://..."
+                                        class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Projects Completed Count</label>
+                                <input type="text" name="homeStatsCount" id="homeStatsCount" placeholder="e.g. 250+"
+                                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Section -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg">
+                        <h3
+                            class="text-xl font-bold mb-4 text-primary border-b border-gray-200 dark:border-gray-700 pb-2">
+                            About Page</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Story Title</label>
+                                <input type="text" name="aboutTitle" id="aboutTitle"
+                                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Story Text</label>
+                                <textarea name="aboutText" id="aboutText"
+                                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 h-32"></textarea>
+                            </div>
+
+                            <!-- Statistics Section -->
+                            <div class="border-t border-gray-100 dark:border-gray-700 pt-4 mt-4">
+                                <label class="block text-sm font-bold mb-3 text-primary">Key Statistics</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Stat 1 -->
+                                    <div class="space-y-2">
+                                        <input type="text" name="stat1Num" id="stat1Num"
+                                            placeholder="Stat 1: Number (e.g. 250+)"
+                                            class="w-full p-2 rounded border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                                        <input type="text" name="stat1Label" id="stat1Label"
+                                            placeholder="Stat 1: Label (e.g. Projects Done)"
+                                            class="w-full p-2 rounded border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                                    </div>
+                                    <!-- Stat 2 -->
+                                    <div class="space-y-2">
+                                        <input type="text" name="stat2Num" id="stat2Num"
+                                            placeholder="Stat 2: Number (e.g. 50+)"
+                                            class="w-full p-2 rounded border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                                        <input type="text" name="stat2Label" id="stat2Label"
+                                            placeholder="Stat 2: Label (e.g. Happy Clients)"
+                                            class="w-full p-2 rounded border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                                    </div>
+                                    <!-- Stat 3 -->
+                                    <div class="space-y-2">
+                                        <input type="text" name="stat3Num" id="stat3Num"
+                                            placeholder="Stat 3: Number (e.g. 5+)"
+                                            class="w-full p-2 rounded border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                                        <input type="text" name="stat3Label" id="stat3Label"
+                                            placeholder="Stat 3: Label (e.g. Years Exp.)"
+                                            class="w-full p-2 rounded border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                                    </div>
+                                    <!-- Stat 4 -->
+                                    <div class="space-y-2">
+                                        <input type="text" name="stat4Num" id="stat4Num"
+                                            placeholder="Stat 4: Number (e.g. 10+)"
+                                            class="w-full p-2 rounded border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                                        <input type="text" name="stat4Label" id="stat4Label"
+                                            placeholder="Stat 4: Label (e.g. Awards)"
+                                            class="w-full p-2 rounded border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Section -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg">
+                        <h3
+                            class="text-xl font-bold mb-4 text-primary border-b border-gray-200 dark:border-gray-700 pb-2">
+                            Contact Info</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Phone</label>
+                                <input type="text" name="contactPhone" id="contactPhone"
+                                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Email</label>
+                                <input type="text" name="contactEmail" id="contactEmail"
+                                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium mb-1">Address</label>
+                                <input type="text" name="contactAddress" id="contactAddress"
+                                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-primary text-white font-bold py-4 rounded-lg text-lg hover:shadow-xl transition-shadow">
+                        Save All Changes
+                    </button>
+                </form>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Add Service Modal -->
+    <div id="serviceModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-full max-w-lg relative">
+            <button onclick="closeModal('serviceModal')"
+                class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i
+                    class="fas fa-times text-xl"></i></button>
+            <h3 class="text-2xl font-bold mb-4" id="serviceModalTitle">Add New Service</h3>
+            <form onsubmit="handleServiceSubmit(event)" class="space-y-4">
+                <input type="hidden" name="editId" id="serviceEditId">
+                <input type="text" name="title" placeholder="Service Title" required
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                <textarea name="description" placeholder="Description" required
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 h-24"></textarea>
+                <!-- Icon Picker -->
+                <div>
+                    <label class="block text-sm font-medium mb-1">Select Icon</label>
+                    <div class="relative">
+                        <input type="text" id="iconSearch" placeholder="Search icons (e.g., 'video', 'design')..."
+                            class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 mb-2"
+                            onkeyup="filterIcons()">
+                        <div id="iconGrid"
+                            class="grid grid-cols-6 sm:grid-cols-8 gap-2 max-h-40 overflow-y-auto p-2 border rounded-lg dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
+                            <!-- Icons injected by JS -->
+                        </div>
+                    </div>
+                    <input type="hidden" name="icon" id="selectedIcon" required>
+                    <p id="iconPreviewText" class="text-sm text-slate-500 mt-2">Selected: <span id="iconName"
+                            class="font-mono">None</span></p>
+                </div>
+                <input type="url" name="imageUrl" placeholder="Image URL (or leave empty)"
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-lg">Save
+                    Service</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Portfolio Modal -->
+    <div id="portfolioModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-full max-w-lg relative">
+            <button onclick="closeModal('portfolioModal')"
+                class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i
+                    class="fas fa-times text-xl"></i></button>
+            <h3 class="text-2xl font-bold mb-4" id="portfolioModalTitle">Add Portfolio Item</h3>
+            <form onsubmit="handlePortfolioSubmit(event)" class="space-y-4">
+                <input type="hidden" name="editId" id="portfolioEditId">
+                <input type="text" name="title" placeholder="Project Title" required
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                <div class="flex gap-2">
+                    <select id="portfolioCategory" name="category"
+                        class="flex-grow p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                        <!-- Populated by JS -->
+                    </select>
+                    <button type="button" onclick="openCategoryManager()"
+                        class="bg-gray-200 dark:bg-slate-700 px-3 rounded-lg hover:bg-primary hover:text-white transition-colors"
+                        title="Manage Categories">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button type="button" onclick="addNewCategory()"
+                        class="bg-gray-200 dark:bg-slate-700 px-4 rounded-lg hover:bg-primary hover:text-white transition-colors"
+                        title="Add New Category">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Media Input Type Selection -->
+                <div class="flex gap-4 mb-2">
+                    <button type="button" onclick="toggleMediaType('file')" id="btn-file"
+                        class="text-sm font-bold text-primary border-b-2 border-primary pb-1">Upload Image</button>
+                    <button type="button" onclick="toggleMediaType('url')" id="btn-url"
+                        class="text-sm font-bold text-slate-500 border-b-2 border-transparent pb-1">Video/Image
+                        URL</button>
+                </div>
+
+                <!-- File Input -->
+                <div id="input-file" class="block">
+                    <input type="file" name="mediaFile" accept="image/*"
+                        class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                    <p class="text-xs text-slate-500 mt-1">Max size: 2MB (Images only). For videos, use URL.</p>
+                </div>
+
+                <!-- URL Input -->
+                <div id="input-url" class="hidden">
+                    <input type="url" name="mediaUrl" placeholder="Image or Video URL (YouTube, Unsplash, etc.)"
+                        class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                </div>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" name="isVideo" id="isVideoCheck" onchange="toggleVideoCover()"
+                        class="rounded border-gray-300 text-primary focus:ring-primary">
+                    <span class="text-sm">Is this a video? (Requires URL)</span>
+                </label>
+
+                <!-- Video Cover Image Input -->
+                <div id="input-cover"
+                    class="hidden bg-slate-50 dark:bg-slate-700/50 p-3 rounded-lg border border-dashed border-slate-300 dark:border-slate-600">
+                    <label class="block text-sm font-bold mb-2">Video Cover Image (Thumbnail)</label>
+                    <input type="file" name="coverFile" accept="image/*"
+                        class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-lg">Save
+                    Project</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Pricing Modal -->
+    <div id="pricingModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-full max-w-lg relative">
+            <button onclick="closeModal('pricingModal')"
+                class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i
+                    class="fas fa-times text-xl"></i></button>
+            <h3 class="text-2xl font-bold mb-4" id="pricingModalTitle">Add Pricing Plan</h3>
+            <form onsubmit="handlePricingSubmit(event)" class="space-y-4">
+                <input type="hidden" name="editId" id="pricingEditId">
+                <input type="text" name="name" placeholder="Plan Name (e.g. Starter)" required
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                <input type="text" name="price" placeholder="Price (e.g. $499)" required
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                <input type="text" name="unit" placeholder="Unit (e.g. / project)"
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                <textarea name="features" placeholder="Features (one per line)" required
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 h-32"></textarea>
+                <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-lg">Save Plan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Process Modal -->
+    <div id="processModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-full max-w-lg relative">
+            <button onclick="closeModal('processModal')"
+                class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i
+                    class="fas fa-times text-xl"></i></button>
+            <h3 class="text-2xl font-bold mb-4" id="processModalTitle">Add Process Step</h3>
+            <form onsubmit="handleProcessSubmit(event)" class="space-y-4">
+                <input type="hidden" name="editId" id="processEditId">
+                <input type="number" name="step" placeholder="Step Number (e.g. 1)" required
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                <input type="text" name="phase" placeholder="Phase Name (e.g. Discovery)" required
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                <input type="text" name="title" placeholder="Step Title (e.g. Consultation)" required
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                <!-- Media Input Type Selection -->
+                <div class="flex gap-4 mb-2">
+                    <button type="button" onclick="toggleProcessMediaType('file')" id="btn-process-file"
+                        class="text-sm font-bold text-primary border-b-2 border-primary pb-1">Upload Image</button>
+                    <button type="button" onclick="toggleProcessMediaType('url')" id="btn-process-url"
+                        class="text-sm font-bold text-slate-500 border-b-2 border-transparent pb-1">Image URL</button>
+                </div>
+
+                <!-- File Input -->
+                <div id="process-input-file" class="block">
+                    <input type="file" name="mediaFile" accept="image/*"
+                        class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 text-sm">
+                    <p class="text-xs text-slate-500 mt-1">Max size: 2MB.</p>
+                </div>
+
+                <!-- URL Input -->
+                <div id="process-input-url" class="hidden">
+                    <input type="url" name="imageUrl" placeholder="Image URL (Phase visual)"
+                        class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600">
+                </div>
+                <textarea name="description" placeholder="Description" required
+                    class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 h-24"></textarea>
+                <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-lg">Save Step</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Portfolio Set Modal -->
+    <div id="editSetModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-full max-w-2xl relative max-h-[90vh] flex flex-col">
+            <button onclick="closeModal('editSetModal')"
+                class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i
+                    class="fas fa-times text-xl"></i></button>
+            <h3 class="text-2xl font-bold mb-4">Manage Project Files</h3>
+            <p class="text-sm text-slate-500 mb-4">Manage images/videos in this set. Add new ones via the main "Add
+                Item" button using the same title.</p>
+
+            <div id="editSetList" class="grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto p-2">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Categories Modal -->
+    <div id="categoryModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-full max-w-md relative">
+            <button onclick="closeModal('categoryModal')"
+                class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i
+                    class="fas fa-times text-xl"></i></button>
+            <h3 class="text-2xl font-bold mb-4">Manage Categories</h3>
+
+            <div id="categoryList" class="space-y-2 max-h-[60vh] overflow-y-auto mb-4">
+                <!-- Injected by JS -->
+            </div>
+
+            <div class="border-t dark:border-slate-700 pt-4">
+                <h4 class="font-bold mb-2 text-sm">Add New Category</h4>
+                <form onsubmit="handleCategoryAdd(event)" class="flex gap-2">
+                    <input type="text" name="newCatName" placeholder="Category Name" required
+                        class="flex-grow p-2 rounded border dark:bg-slate-700 dark:border-slate-600">
+                    <button type="submit" class="bg-primary text-white px-4 py-2 rounded font-bold"><i
+                            class="fas fa-plus"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-init.js"></script>
+
+    <script src="js/admin-logic.js"></script>
+</body>
+
+</html>

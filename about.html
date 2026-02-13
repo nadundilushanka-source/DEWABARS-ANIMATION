@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - DEWABARS ANIMATIONS</title>
+    <meta name="description"
+        content="Learn about our animation team, our mission, and our passion for creating visual stories.">
+    <meta name="keywords" content="About Dewabars, Animation Team, Sri Lanka Animators, Creative Studio">
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.backgroundColor = '#080808';
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.style.backgroundColor = '#ffffff';
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#00e676', // Luminous Green (High contrast)
+                        secondary: '#111111', // Dark Black
+                        accent: '#39FF14', // Neon Green (Glows)
+                        dark: '#080808', // Deepest Black
+                        light: '#ffffff',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Performance Optimization: Preconnects -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-light text-slate-800 dark:bg-dark dark:text-slate-100 flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav
+        class="fixed w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-lg transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0 cursor-pointer group" onclick="window.location.href='index.html'">
+                    <h1 class="text-2xl md:text-3xl font-black tracking-tighter select-none">
+                        <span
+                            class="text-slate-900 dark:text-white group-hover:text-primary transition-colors duration-300">DEWABARS</span>
+                        <span class="text-primary drop-shadow-[0_0_10px_rgba(0,230,118,0.5)]">ANIMATION</span>
+                    </h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html"
+                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-primary dark:hover:text-green-400">Home</a>
+                        <a href="services.html"
+                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-primary dark:hover:text-green-400">Services</a>
+                        <a href="portfolio.html"
+                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-primary dark:hover:text-green-400">Portfolio</a>
+                        <a href="pricing.html"
+                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-primary dark:hover:text-green-400">Pricing</a>
+                        <a href="about.html"
+                            class="px-3 py-2 rounded-md text-sm font-medium text-primary bg-green-50 dark:bg-slate-800 dark:text-green-400">About</a>
+                        <a href="how-it-works.html"
+                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-primary dark:hover:text-green-400">How
+                            It Works</a>
+                        <a href="testimonials.html"
+                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-primary dark:hover:text-green-400">Testimonials</a>
+                        <a href="contact.html"
+                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-primary dark:hover:text-green-400">Contact</a>
+                    </div>
+                </div>
+                <!-- ... Mobile Menu & Toggle (Same structure) ... -->
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle"
+                        class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                        <i class="fas fa-moon text-slate-600 dark:text-yellow-300 text-xl"></i>
+                    </button>
+                    <div class="-mr-2 flex md:hidden">
+                        <button id="mobile-menu-btn" type="button"
+                            class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden hidden bg-white dark:bg-slate-900 border-t dark:border-slate-700" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html"
+                    class="block px-3 py-2 rounded-md text-base font-medium hover:text-primary dark:hover:text-green-400">Home</a>
+                <a href="services.html"
+                    class="block px-3 py-2 rounded-md text-base font-medium hover:text-primary dark:hover:text-green-400">Services</a>
+                <a href="portfolio.html"
+                    class="block px-3 py-2 rounded-md text-base font-medium hover:text-primary dark:hover:text-green-400">Portfolio</a>
+                <a href="pricing.html"
+                    class="block px-3 py-2 rounded-md text-base font-medium hover:text-primary dark:hover:text-green-400">Pricing</a>
+                <a href="about.html"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-primary bg-green-50 dark:bg-slate-800 dark:text-green-400">About</a>
+                <a href="how-it-works.html"
+                    class="block px-3 py-2 rounded-md text-base font-medium hover:text-primary dark:hover:text-green-400">How
+                    It Works</a>
+                <a href="testimonials.html"
+                    class="block px-3 py-2 rounded-md text-base font-medium hover:text-primary dark:hover:text-green-400">Testimonials</a>
+                <a href="contact.html"
+                    class="block px-3 py-2 rounded-md text-base font-medium hover:text-primary dark:hover:text-green-400">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <a href="https://wa.me/94775674912" target="_blank"
+        class="fixed bottom-6 right-6 z-50 bg-green-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 animate-pulse-slow">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- About Section -->
+    <section class="pt-32 pb-20 px-6 flex-grow">
+        <div class="container mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Our <span class="text-primary">Story</span></h1>
+                <p class="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">We are a passionate team of animators
+                    and designers.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right">
+                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        alt="Creative Team" class="rounded-3xl shadow-2xl float-animation">
+                </div>
+                <div data-aos="fade-left">
+                    <h2 class="text-3xl font-bold mb-6">Creativity Meets Technology</h2>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6 text-lg">
+                        Founded in 2024, DEWABARS ANIMATIONS started with a simple mission: to bring imagination to life
+                        through stunning visuals. Our studio specializes in blending artistic vision with cutting-edge
+                        technology.
+                    </p>
+                    <p class="text-slate-600 dark:text-slate-300 mb-8 text-lg">
+                        Whether it's a 30-second commercial or a full-scale architectural visualization, we approach
+                        every project with the same level of passion and attention to detail.
+                    </p>
+
+                    <div id="about-stats" class="grid grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg text-center">
+                            <div class="text-4xl font-bold text-primary mb-2">250+</div>
+                            <div class="text-sm text-slate-500">Projects Done</div>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg text-center">
+                            <div class="text-4xl font-bold text-accent mb-2">50+</div>
+                            <div class="text-sm text-slate-500">Happy Clients</div>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg text-center">
+                            <div class="text-4xl font-bold text-green-600 mb-2">5+</div>
+                            <div class="text-sm text-slate-500">Years Exp.</div>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg text-center">
+                            <div class="text-4xl font-bold text-green-400 mb-2">10+</div>
+                            <div class="text-sm text-slate-500">Awards</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-12 mt-auto">
+        <!-- Footer Content (Consistent) -->
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="mb-6 cursor-pointer" onclick="window.location.href='index.html'">
+                        <h2 class="text-2xl font-black tracking-tighter">
+                            <span class="text-slate-900 dark:text-white">DEWABARS</span>
+                            <span class="text-primary">ANIMATION</span>
+                        </h2>
+                    </div>
+                    <!-- ... -->
+                    <p class="text-slate-500 dark:text-slate-400 mb-6">
+                        Bringing stories to life through the power of animation and creative design.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-primary hover:text-white transition-colors"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-primary hover:text-white transition-colors"><i
+                                class="fab fa-twitter"></i></a>
+                        <!-- ... -->
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="index.html"
+                                class="text-slate-500 dark:text-slate-400 hover:text-primary hover:pl-2 transition-all duration-300 block">Home</a>
+                        </li>
+                        <li><a href="about.html"
+                                class="text-slate-500 dark:text-slate-400 hover:text-primary hover:pl-2 transition-all duration-300 block">About
+                                Us</a></li>
+                        <li><a href="services.html"
+                                class="text-slate-500 dark:text-slate-400 hover:text-primary hover:pl-2 transition-all duration-300 block">Services</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-6">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="pricing.html"
+                                class="text-slate-500 dark:text-slate-400 hover:text-primary hover:pl-2 transition-all duration-300 block">Pricing</a>
+                        </li>
+                        <li><a href="contact.html"
+                                class="text-slate-500 dark:text-slate-400 hover:text-primary hover:pl-2 transition-all duration-300 block">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-6">Contact Info</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3 text-slate-500 dark:text-slate-400">
+                            <i class="fas fa-map-marker-alt mt-1 text-primary"></i>
+                            <span>Dewabars Animation Studio,<br>Sri Lanka</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-500 dark:text-slate-400">
+                            <i class="fas fa-phone text-primary"></i>
+                            <span>077 567 4912</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-500 dark:text-slate-400">
+                            <i class="fas fa-envelope text-primary"></i>
+                            <span>oryxranking@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="border-t border-slate-200 dark:border-slate-800 mt-12 pt-8 text-center text-slate-500 dark:text-slate-400 text-sm">
+                &copy; 2024 DEWABARS ANIMATIONS. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-init.js"></script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/public-logic.js"></script>
+    <script>
+        AOS.init({ once: true, offset: 50, duration: 800 });
+    </script>
+</body>
+
+</html>
